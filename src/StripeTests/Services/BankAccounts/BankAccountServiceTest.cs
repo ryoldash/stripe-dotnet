@@ -1,6 +1,7 @@
 namespace StripeTests
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
 
@@ -128,6 +129,13 @@ namespace StripeTests
             Assert.NotNull(bankAccounts);
             Assert.Equal("list", bankAccounts.Object);
             Assert.Single(bankAccounts.Data);
+        }
+
+        [Fact]
+        public void ListAutoPaging()
+        {
+            var bankAccounts = this.service.ListAutoPaging(CustomerId, this.listOptions).ToList();
+            Assert.NotNull(bankAccounts);
         }
 
         // stripe-mock does not return a bank account object on update today so we do not test

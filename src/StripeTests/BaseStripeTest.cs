@@ -37,8 +37,10 @@ namespace StripeTests
             var initialized = initializer.Value;
 
             // Reset the mock before each test
-            mockHandler.Invocations.Clear();
+            MockHandler.Reset();
         }
+
+        protected static Mock<HttpClientHandler> MockHandler { get => mockHandler; set => mockHandler = value; }
 
         /// <summary>
         /// Gets fixture data from stripe-mock for a resource expected to be at the given API path.
@@ -119,7 +121,7 @@ namespace StripeTests
 
         protected void AssertRequest(HttpMethod method, string path)
         {
-            mockHandler.Protected().Verify(
+            MockHandler.Protected().Verify(
                 "SendAsync",
                 Times.Once(),
                 ItExpr.Is<HttpRequestMessage>(m =>
@@ -171,7 +173,7 @@ namespace StripeTests
             {
                 CallBase = true
             };
-            StripeConfiguration.HttpMessageHandler = mockHandler.Object;
+            StripeConfiguration.HttpMessageHandler = MockHandler.Object;
 
             return null;
         }
